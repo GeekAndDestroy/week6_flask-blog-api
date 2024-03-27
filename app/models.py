@@ -57,3 +57,12 @@ class Post(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "body": self.body,
+            "dateCreated": self.date_created,
+            "user_id": self.user_id
+        }
