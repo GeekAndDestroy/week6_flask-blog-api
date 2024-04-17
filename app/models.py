@@ -78,7 +78,7 @@ class Post(db.Model):
 
     def delete(self):
         db.session.delete(self) # deleting THIS object from the database
-        db.session.commit() # commiting our changes
+        db.session.commit() # committing our changes
 
     def to_dict(self):
         return {
@@ -106,8 +106,8 @@ class Comment(db.Model):
     date_created = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
-    user = db.relationship('Comment', back_populates='comments')
-    post = db.relationship('Comment', back_populates='comments')
+    user = db.relationship('User', back_populates='comments')
+    post = db.relationship('Post', back_populates='comments')
 
     # INSERT INTO
     def __init__(self, **kwargs):
