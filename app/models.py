@@ -44,7 +44,7 @@ class User(db.Model):
             "email": self.email,
             "dateCreated": self.date_created
         }
-    
+
     def get_token(self):
         now = datetime.now(timezone.utc)
         if self.token and self.token_expiration > now + timedelta(minutes=1):
@@ -53,6 +53,7 @@ class User(db.Model):
         self.token_expiration = now + timedelta(hours=1)
         self.save()
         return {"token": self.token, "tokenExpiration": self.token_expiration}
+        
 
 
 class Post(db.Model):
@@ -63,7 +64,7 @@ class Post(db.Model):
     # In SQL - user_id INTEGER NOT NULL, FOREIGN KEY(user_id) REFERENCES user(id)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     author = db.relationship('User', back_populates='posts')
-    comments = db.relationship('Comment', back_populates="post")
+    comments = db.relationship('Comment', back_populates='post')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -77,8 +78,8 @@ class Post(db.Model):
         db.session.commit()
 
     def delete(self):
-        db.session.delete(self) # deleting THIS object from the database
-        db.session.commit() # committing our changes
+        db.session.delete(self)
+        db.session.commit()
 
     def to_dict(self):
         return {
@@ -87,9 +88,9 @@ class Post(db.Model):
             "body": self.body,
             "dateCreated": self.date_created,
             "author": self.author.to_dict(),
-            'comments': [comment.to_dict() for comment in self.comments]
+            "comments": [comment.to_dict() for comment in self.comments]
         }
-    
+
     def update(self, **kwargs):
         allowed_fields = {'title', 'body'}
 
